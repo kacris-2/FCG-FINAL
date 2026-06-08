@@ -57,4 +57,21 @@ if(APPLE)
 endif()
 
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Tappa02)
+# ====================================================================
+# CONFIGURATION FOR TAPPA 03 
+# ====================================================================
+if(APPLE)
+    add_executable(Tappa03 MACOSX_BUNDLE Cartella-Tappa03/main.cpp)
+else()
+    add_executable(Tappa03 Cartella-Tappa03/main.cpp)
+endif()
+
+target_link_libraries(Tappa03 PRIVATE SFML::Graphics)
+
+if(APPLE)
+    target_link_libraries(Tappa03 PRIVATE "-framework Cocoa" "-framework OpenGL" "-framework IOKit")
+    set_target_properties(Tappa03 PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
+
+# Set Tappa03 as the default startup project inside Visual Studio
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Tappa03)
