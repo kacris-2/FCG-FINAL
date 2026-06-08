@@ -24,22 +24,37 @@ FetchContent_Declare(SFML
 )
 FetchContent_MakeAvailable(SFML)
 
-# EXECUTABLE DEFINITION FOR Tappa 01 
+# ====================================================================
+# CONFIGURATION FOR TAPPA 01 
+# ====================================================================
 if(APPLE)
-    add_executable(Tappa01 MACOSX_BUNDLE Tappa01/main.cpp)
+    add_executable(Tappa01 MACOSX_BUNDLE Cartella-Tappa01/main.cpp)
 else()
-    add_executable(Tappa01 Tappa01/main.cpp)
+    add_executable(Tappa01 Cartella-Tappa01/main.cpp)
 endif()
 
-
 target_link_libraries(Tappa01 PRIVATE SFML::Graphics)
-
 
 if(APPLE)
     target_link_libraries(Tappa01 PRIVATE "-framework Cocoa" "-framework OpenGL" "-framework IOKit")
     set_target_properties(Tappa01 PROPERTIES MACOSX_BUNDLE TRUE)
-    set(CMAKE_MACOSX_RPATH 1)
+endif()
+
+# ====================================================================
+# CONFIGURATION FOR TAPPA 02 
+# ====================================================================
+if(APPLE)
+    add_executable(Tappa02 MACOSX_BUNDLE Cartella-Tappa02/main.cpp)
+else()
+    add_executable(Tappa02 Cartella-Tappa02/main.cpp)
+endif()
+
+target_link_libraries(Tappa02 PRIVATE SFML::Graphics)
+
+if(APPLE)
+    target_link_libraries(Tappa02 PRIVATE "-framework Cocoa" "-framework OpenGL" "-framework IOKit")
+    set_target_properties(Tappa02 PROPERTIES MACOSX_BUNDLE TRUE)
 endif()
 
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Tappa01)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Tappa02)
