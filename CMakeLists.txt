@@ -299,6 +299,43 @@ if(APPLE)
 endif()
 
 # =========================================================
-# SHADERS 
+# Tappa 09 
+# =========================================================
+if(APPLE)
+    add_executable(Tappa09
+        MACOSX_BUNDLE
+        Cartella-Tappa09/main.cpp
+        external/src/glad.c
+    )
+else()
+    add_executable(Tappa09
+        Cartella-Tappa09/main.cpp
+        external/src/glad.c
+    )
+endif()
+
+target_include_directories(Tappa09 PRIVATE
+    external/include
+)
+
+target_link_libraries(Tappa09 PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+    glm::glm       
+    OpenGL::GL
+)
+
+if(APPLE)
+    target_link_libraries(Tappa09 PRIVATE
+        "-framework Cocoa"
+        "-framework OpenGL"
+        "-framework IOKit"
+        "-framework CoreVideo"
+    )
+endif()
+# =========================================================
+# SHADERS and TEXTURES
 # =========================================================
 file(COPY shaders DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY textures DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}) 
