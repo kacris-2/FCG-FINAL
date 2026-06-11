@@ -32,9 +32,6 @@ FetchContent_MakeAvailable(SFML)
 # =========================================================
 # GLM 
 # =========================================================
-
-set(GLM_BUILD_ENABLE OFF CACHE INTERNAL "Disable GLM test and build utilities")
-
 FetchContent_Declare(
     glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
@@ -42,7 +39,14 @@ FetchContent_Declare(
     GIT_SHALLOW ON
 )
 
+
+set(BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Forzar estático para GLM" FORCE)
+
 FetchContent_MakeAvailable(glm)
+
+
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVED})
 
 # =========================================================
 # OPENGL 
@@ -133,7 +137,7 @@ target_link_libraries(Tappa04 PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    glm::glm       
+    glm::glm       # Target Header-Only nativo
     OpenGL::GL
 )
 
