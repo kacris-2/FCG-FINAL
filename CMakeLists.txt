@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
 
+
+if(POLICY CMP0000)
+    set(CMAKE_POLICY_VERSION_MINIMUM "3.5")
+endif()
+
 project(fcg-final LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -27,6 +32,9 @@ FetchContent_MakeAvailable(SFML)
 # =========================================================
 # GLM 
 # =========================================================
+
+set(GLM_BUILD_ENABLE OFF CACHE INTERNAL "Disable GLM test and build utilities")
+
 FetchContent_Declare(
     glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
@@ -121,12 +129,11 @@ target_include_directories(Tappa04 PRIVATE
     external/include
 )
 
-# LIBRERÍAS DE SFML 3.0
 target_link_libraries(Tappa04 PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    glm
+    glm::glm       
     OpenGL::GL
 )
 
