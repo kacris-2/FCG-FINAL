@@ -39,6 +39,7 @@ FetchContent_Declare(
     GIT_SHALLOW ON
 )
 
+
 set(BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Forzar estático para GLM" FORCE)
 
@@ -229,7 +230,7 @@ endif()
 if(APPLE)
     add_executable(Tappa07
         MACOSX_BUNDLE
-        Cartella-Tappa07/main.cpp  
+        Cartella-Tappa07/main.cpp
         external/src/glad.c
     )
 else()
@@ -253,6 +254,43 @@ target_link_libraries(Tappa07 PRIVATE
 
 if(APPLE)
     target_link_libraries(Tappa07 PRIVATE
+        "-framework Cocoa"
+        "-framework OpenGL"
+        "-framework IOKit"
+        "-framework CoreVideo"
+    )
+endif()
+
+# =========================================================
+# Tappa 08 
+# =========================================================
+if(APPLE)
+    add_executable(Tappa08
+        MACOSX_BUNDLE
+        Cartella-Tappa08/main.cpp   
+        external/src/glad.c
+    )
+else()
+    add_executable(Tappa08
+        Cartella-Tappa08/main.cpp
+        external/src/glad.c
+    )
+endif()
+
+target_include_directories(Tappa08 PRIVATE
+    external/include
+)
+
+target_link_libraries(Tappa08 PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+    glm::glm       
+    OpenGL::GL
+)
+
+if(APPLE)
+    target_link_libraries(Tappa08 PRIVATE
         "-framework Cocoa"
         "-framework OpenGL"
         "-framework IOKit"
