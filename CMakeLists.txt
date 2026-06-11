@@ -39,13 +39,12 @@ FetchContent_Declare(
     GIT_SHALLOW ON
 )
 
-# Forzamos de forma agresiva a CMake a ignorar el -DBUILD_SHARED_LIBS=TRUE de GitHub solo para GLM
 set(BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Forzar estático para GLM" FORCE)
 
 FetchContent_MakeAvailable(glm)
 
-# Restauramos el estado original para el resto del proyecto
+
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVED})
 
 # =========================================================
@@ -137,7 +136,7 @@ target_link_libraries(Tappa04 PRIVATE
     sfml-graphics
     sfml-window
     sfml-system
-    glm::glm    
+    glm::glm       
     OpenGL::GL
 )
 
@@ -193,7 +192,7 @@ endif()
 if(APPLE)
     add_executable(Tappa06
         MACOSX_BUNDLE
-        Cartella-Tappa06/main.cpp   
+        Cartella-Tappa06/main.cpp
         external/src/glad.c
     )
 else()
@@ -217,6 +216,43 @@ target_link_libraries(Tappa06 PRIVATE
 
 if(APPLE)
     target_link_libraries(Tappa06 PRIVATE
+        "-framework Cocoa"
+        "-framework OpenGL"
+        "-framework IOKit"
+        "-framework CoreVideo"
+    )
+endif()
+
+# =========================================================
+# Tappa 07 
+# =========================================================
+if(APPLE)
+    add_executable(Tappa07
+        MACOSX_BUNDLE
+        Cartella-Tappa07/main.cpp  
+        external/src/glad.c
+    )
+else()
+    add_executable(Tappa07
+        Cartella-Tappa07/main.cpp
+        external/src/glad.c
+    )
+endif()
+
+target_include_directories(Tappa07 PRIVATE
+    external/include
+)
+
+target_link_libraries(Tappa07 PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+    glm::glm       
+    OpenGL::GL
+)
+
+if(APPLE)
+    target_link_libraries(Tappa07 PRIVATE
         "-framework Cocoa"
         "-framework OpenGL"
         "-framework IOKit"
