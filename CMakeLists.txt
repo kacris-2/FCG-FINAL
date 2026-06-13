@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
 
-
 if(POLICY CMP0000)
     set(CMAKE_POLICY_VERSION_MINIMUM "3.5")
 endif()
@@ -30,7 +29,7 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 # =========================================================
-# GLM 
+# GLM (Declaración en tu posición exacta)
 # =========================================================
 FetchContent_Declare(
     glm
@@ -39,12 +38,44 @@ FetchContent_Declare(
     GIT_SHALLOW ON
 )
 
+# =========================================================
+# IMGUI BASE & IMGUI-SFML (Líneas corregidas sin romper tu orden)
+# =========================================================
+# 1. Download the official core Dear ImGui library first
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.91.1
+    GIT_SHALLOW ON
+)
 
+# SINTAXIS MODERNA: Reemplaza las líneas antiguas de Populate para quitar el Warning
+FetchContent_MakeAvailable(imgui)
+
+# 2. Expose the downloaded path to imgui-sfml so it finds 'imgui.h'
+set(IMGUI_DIR ${imgui_SOURCE_DIR} CACHE PATH "Path to ImGui core headers" FORCE)
+
+# 3. Now safely download and build the SFML binding bridge
+FetchContent_Declare(
+    imgui-sfml
+    GIT_REPOSITORY https://github.com/eliasdaler/imgui-sfml.git
+    GIT_TAG v3.0
+    GIT_SHALLOW ON
+)
+
+# Force ImGui-SFML to build statically integrated with our FetchContent SFML
+set(IMGUI_SFML_FIND_SFML OFF CACHE BOOL "" FORCE)
+set(IMGUI_SFML_USE_SYSTEM_IMGUI OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(imgui-sfml)
+
+# =========================================================
+# GLM MAKE AVAILABLE (Tu orden exacto que soluciona el error)
+# =========================================================
 set(BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Forzar estático para GLM" FORCE)
 
 FetchContent_MakeAvailable(glm)
-
 
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVED})
 
@@ -334,8 +365,47 @@ if(APPLE)
         "-framework CoreVideo"
     )
 endif()
+
 # =========================================================
-# SHADERS and TEXTURES
+# Tappa 10 - INTERFAZ GRÁFICA IMGUI (MODO PRO)
+# =========================================================
+if(APPLE)
+    add_executable(Tappa10
+        MACOSX_BUNDLE
+        Cartella-Tappa10/main.cpp
+        external/src/glad.c
+    )
+else()
+    add_executable(Tappa10
+        Cartella-Tappa10/main.cpp
+        external/src/glad.c
+    )
+endif()
+
+target_include_directories(Tappa10 PRIVATE
+    external/include
+)
+
+target_link_libraries(Tappa10 PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+    glm::glm       
+    OpenGL::GL
+    ImGui-SFML::ImGui-SFML
+)
+
+if(APPLE)
+    target_link_libraries(Tappa10 PRIVATE
+        "-framework Cocoa"
+        "-framework OpenGL"
+        "-framework IOKit"
+        "-framework CoreVideo"
+    )
+endif()
+
+# =========================================================
+# SHADERS and TEXTURES 
 # =========================================================
 file(COPY shaders DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file(COPY textures DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}) 
+file(COPY textures DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
