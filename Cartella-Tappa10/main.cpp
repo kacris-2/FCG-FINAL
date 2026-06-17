@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
-#include <imgui-sfml.h>
+#include <imgui-SFML.h>
 #include <iostream>
 #include <vector>
 #include <fstream>

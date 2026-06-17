@@ -10,6 +10,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# =========================================================
+# CONFIGURACIÓN PARA QUITAR WARNINGS DE TERCEROS
+# =========================================================
+set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
+set(FREETYPE_SYSTEM_INCLUDES ON CACHE INTERNAL "")
+
 set(SFML_BUILD_AUDIO OFF CACHE INTERNAL "")
 set(SFML_BUILD_NETWORK OFF CACHE INTERNAL "")
 
@@ -23,7 +29,7 @@ FetchContent_Declare(SFML
     GIT_TAG 3.0.0
     GIT_SHALLOW ON
     EXCLUDE_FROM_ALL
-    SYSTEM
+    SYSTEM # <--- Quita warnings de SFML
 )
 
 FetchContent_MakeAvailable(SFML)
@@ -36,6 +42,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/g-truc/glm.git
     GIT_TAG 1.0.1
     GIT_SHALLOW ON
+    SYSTEM # <--- Quita warnings de GLM
 )
 
 # =========================================================
@@ -47,6 +54,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG v1.91.1
     GIT_SHALLOW ON
+    SYSTEM
 )
 
 # SINTAXIS MODERNA: Reemplaza las líneas antiguas de Populate para quitar el Warning
@@ -61,6 +69,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/eliasdaler/imgui-sfml.git
     GIT_TAG v3.0
     GIT_SHALLOW ON
+    SYSTEM
 )
 
 # Force ImGui-SFML to build statically integrated with our FetchContent SFML
